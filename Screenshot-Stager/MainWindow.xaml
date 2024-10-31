@@ -10,16 +10,69 @@
     Height="450"
     mc:Ignorable="d">
     <Grid>
-        <StackPanel Orientation="Vertical">
-            <Button
-                x:Name="ChangeSizeBTN"
-                Click="ChangeSizeBTN_Click"
-                Content="Change size" />
-            <Button
-                x:Name="ListWindows"
-                Click="ListWindows_Click"
-                Content="List Windows" />
-            <TextBlock x:Name="WindowsText" Text="Windows" />
-        </StackPanel>
+        <Image
+            x:Name="BackgroundImage"
+            Source="/TreeBackground.jpg"
+            Stretch="UniformToFill" />
+
+        <Expander IsExpanded="True">
+            <StackPanel
+                Width="400"
+                HorizontalAlignment="Left"
+                Orientation="Vertical">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Content="Width:" />
+                    <TextBox
+                        x:Name="WidthTB"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Text="800" />
+
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Content="Height:" />
+                    <TextBox
+                        x:Name="HeightTB"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Text="450" />
+                </Grid>
+                <Button
+                    x:Name="SetSizeButton"
+                    Click="SetSizeButton_Click"
+                    Content="Set Stage Size" />
+
+                <Button
+                    x:Name="ListWindows"
+                    Click="ListWindows_Click"
+                    Content="Refresh List of Windows" />
+
+                <ListView x:Name="WindowList">
+                    <ListView.ItemTemplate>
+                        <DataTemplate DataType="local:WindowDetails">
+                            <TextBlock Tag="{Binding Path=Handle}" Text="{Binding Path=Title}" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Button
+                    x:Name="ChangeSizeBTN"
+                    Click="ChangeSizeBTN_Click"
+                    Content="Stage Selected Window" />
+            </StackPanel>
+        </Expander>
     </Grid>
 </Window>

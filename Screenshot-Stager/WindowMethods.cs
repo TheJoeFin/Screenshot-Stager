@@ -2,8 +2,10 @@
 using System.Text;
 using HWND = System.IntPtr;
 
+namespace Screenshot_Stager;
+
 /// <summary>Contains functionality to get all the open windows.</summary>
-public static partial class OpenWindowGetter
+public static partial class WindowMethods
 {
     /// <summary>Returns a dictionary that contains the handle and title of all the open windows.</summary>
     /// <returns>A dictionary that contains the handle and title of all the open windows.</returns>
@@ -31,6 +33,11 @@ public static partial class OpenWindowGetter
         return windows;
     }
 
+    public static void ChangeSize(HWND hWnd, int x, int y, int width, int height)
+    {
+        _ = SetWindowPos(hWnd, HWND_TOPMOST, x, y, width, height, 0);
+    }
+
     private delegate bool EnumWindowsProc(HWND hWnd, int lParam);
 
     [DllImport("USER32.DLL")]
@@ -47,4 +54,13 @@ public static partial class OpenWindowGetter
 
     [DllImport("USER32.DLL")]
     private static extern IntPtr GetShellWindow();
+
+    [DllImport("USER32.DLL")]
+    private static extern bool SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+
+    internal static readonly IntPtr HWND_TOPMOST = new(-1);
+    internal const uint SWP_NOSIZE = 0x0001;
+    internal const uint SWP_NOMOVE = 0x0002;
+    internal const uint SWP_NOACTIVATE = 0x0010;
+    internal const uint SWP_SHOWWINDOW = 0x0040;
 }
