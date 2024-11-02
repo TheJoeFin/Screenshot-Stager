@@ -8,14 +8,38 @@
     Title="MainWindow"
     Width="800"
     Height="450"
+    Background="DimGray"
+    LocationChanged="Window_LocationChanged"
+    SizeChanged="Window_SizeChanged"
+    WindowStyle="None"
     mc:Ignorable="d">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         <Image
             x:Name="BackgroundImage"
+            Grid.Row="1"
             Source="/TreeBackground.jpg"
             Stretch="UniformToFill" />
 
-        <Expander IsExpanded="True">
+        <Button
+            Width="48"
+            Height="32"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Background="Red"
+            Click="CloseButton_Click">
+            <TextBlock FontFamily="Segoe UI Symbol" Text="" />
+        </Button>
+
+        <Expander
+            Grid.RowSpan="2"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Header="Screenshot Stager : Options"
+            IsExpanded="True">
             <StackPanel
                 Width="400"
                 HorizontalAlignment="Left"

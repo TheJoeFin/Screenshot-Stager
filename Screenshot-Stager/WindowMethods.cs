@@ -35,7 +35,7 @@ public static partial class WindowMethods
 
     public static void ChangeSize(HWND hWnd, int x, int y, int width, int height)
     {
-        _ = SetWindowPos(hWnd, HWND_TOPMOST, x, y, width, height, 0);
+        _ = SetWindowPos(hWnd, HWND_TOPMOST, x, y, width, height, SWP_NOACTIVATE);
     }
 
     private delegate bool EnumWindowsProc(HWND hWnd, int lParam);

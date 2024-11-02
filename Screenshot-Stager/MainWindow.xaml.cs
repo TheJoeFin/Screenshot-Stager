@@ -14,6 +14,11 @@ public partial class MainWindow : Window
 
     private void ChangeSizeBTN_Click(object sender, RoutedEventArgs e)
     {
+        StageSelectedWindow();
+    }
+
+    private void StageSelectedWindow()
+    {
         if (WindowList.SelectedItem is not WindowDetails window)
             return;
 
@@ -64,8 +69,28 @@ public partial class MainWindow : Window
 
         double dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
 
-        Height = heightInt * dpi;
-        Width = widthInt * dpi;
+        Height = heightInt;
+        Width = widthInt;
+    }
+
+    private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        StageSelectedWindow();
+    }
+
+    private void Window_LocationChanged(object sender, EventArgs e)
+    {
+        StageSelectedWindow();
+    }
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void CloseButton_Click(object sender, RoutedEventArgs e)
+    {
+        Close();
     }
 }
 
