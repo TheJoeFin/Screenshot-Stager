@@ -5,17 +5,27 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Screenshot_Stager"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="MainWindow"
-    Width="800"
-    Height="450"
-    Background="DimGray"
+    Width="1000"
+    Height="600"
+    Background="{ui:ThemeResource AccentContentFillColorPrimaryBrush}"
     LocationChanged="Window_LocationChanged"
     SizeChanged="Window_SizeChanged"
     WindowStyle="None"
     mc:Ignorable="d">
+    <Window.Resources>
+        <Style x:Key="LabelText" TargetType="Label">
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Foreground" Value="{ui:ThemeResource TextFillColorPrimaryBrush}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="32" />
+            <RowDefinition Height="42" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Image
@@ -25,78 +35,92 @@
             Stretch="UniformToFill" />
 
         <Button
-            Width="48"
-            Height="32"
+            Width="40"
+            Height="40"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
             Background="Red"
-            Click="CloseButton_Click">
+            Click="CloseButton_Click"
+            Visibility="Collapsed">
             <TextBlock FontFamily="Segoe UI Symbol" Text="" />
         </Button>
 
-        <Expander
-            Grid.RowSpan="2"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Header="Screenshot Stager : Options"
-            IsExpanded="True">
-            <StackPanel
-                Width="400"
+        <Grid Grid.RowSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <ui:TitleBar
+                Grid.Column="1"
+                Height="40"
+                ShowMaximize="False"
+                ShowMinimize="False" />
+
+            <Expander
+                Width="300"
                 HorizontalAlignment="Left"
-                Orientation="Vertical">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="auto" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto" />
-                    </Grid.RowDefinitions>
+                VerticalAlignment="Top"
+                Background="{ui:ThemeResource ApplicationBackgroundBrush}"
+                Header="Screenshot Stager : Options"
+                IsExpanded="True">
+                <StackPanel HorizontalAlignment="Left" Orientation="Vertical">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
 
-                    <Label
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        Content="Width:" />
-                    <TextBox
-                        x:Name="WidthTB"
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        Text="800" />
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Content="Width:"
+                            Style="{StaticResource LabelText}" />
+                        <TextBox
+                            x:Name="WidthTB"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Text="800" />
 
-                    <Label
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Content="Height:" />
-                    <TextBox
-                        x:Name="HeightTB"
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        Text="450" />
-                </Grid>
-                <Button
-                    x:Name="SetSizeButton"
-                    Click="SetSizeButton_Click"
-                    Content="Set Stage Size" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Content="Height:"
+                            Style="{StaticResource LabelText}" />
+                        <TextBox
+                            x:Name="HeightTB"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Text="450" />
+                    </Grid>
+                    <Button
+                        x:Name="SetSizeButton"
+                        Click="SetSizeButton_Click"
+                        Content="Set Stage Size" />
 
-                <Button
-                    x:Name="ListWindows"
-                    Click="ListWindows_Click"
-                    Content="Refresh List of Windows" />
+                    <Button
+                        x:Name="ListWindows"
+                        Click="ListWindows_Click"
+                        Content="Refresh List of Windows" />
 
-                <ListView x:Name="WindowList">
-                    <ListView.ItemTemplate>
-                        <DataTemplate DataType="local:WindowDetails">
-                            <TextBlock Tag="{Binding Path=Handle}" Text="{Binding Path=Title}" />
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    <ListView x:Name="WindowList">
+                        <ListView.ItemTemplate>
+                            <DataTemplate DataType="local:WindowDetails">
+                                <TextBlock Tag="{Binding Path=Handle}" Text="{Binding Path=Title}" />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
 
-                <Button
-                    x:Name="ChangeSizeBTN"
-                    Click="ChangeSizeBTN_Click"
-                    Content="Stage Selected Window" />
-            </StackPanel>
-        </Expander>
+                    <Button
+                        x:Name="ChangeSizeBTN"
+                        Click="ChangeSizeBTN_Click"
+                        Content="Stage Selected Window" />
+                </StackPanel>
+            </Expander>
+
+        </Grid>
     </Grid>
 </Window>
