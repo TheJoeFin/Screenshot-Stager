@@ -39,14 +39,9 @@
         <Grid Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <ui:TitleBar
-                Grid.Column="1"
-                Height="40"
-                ShowMaximize="False"
-                ShowMinimize="False" />
-
             <Expander
                 Width="300"
                 HorizontalAlignment="Left"
@@ -111,6 +106,22 @@
                 </StackPanel>
             </Expander>
 
+            <ui:Button
+                Name="ScreenshotButton"
+                Grid.Column="1"
+                Height="40"
+                Margin="1"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Command="{Binding TakeScreenshotCommand}"
+                Content="Screenshot"
+                Icon="{ui:SymbolIcon Symbol=Camera24}" />
+
+            <ui:TitleBar
+                Grid.Column="2"
+                Height="40"
+                ShowMaximize="False"
+                ShowMinimize="False" />
         </Grid>
     </Grid>
 </Window>
