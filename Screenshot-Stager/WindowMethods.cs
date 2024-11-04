@@ -33,6 +33,11 @@ public static partial class WindowMethods
         return windows;
     }
 
+    public static double GetScaleForHwnd(HWND hWnd)
+    {
+        return 96.0 / GetDpiForWindow(hWnd);
+    }
+
     public static void ChangeSize(HWND hWnd, int x, int y, int width, int height)
     {
         _ = SetWindowPos(hWnd, HWND_TOPMOST, x, y, width, height, SWP_NOACTIVATE);
@@ -63,4 +68,7 @@ public static partial class WindowMethods
     internal const uint SWP_NOMOVE = 0x0002;
     internal const uint SWP_NOACTIVATE = 0x0010;
     internal const uint SWP_SHOWWINDOW = 0x0040;
+
+    [DllImport("USER32.DLL")]
+    private static extern uint GetDpiForWindow(HWND hWnd);
 }

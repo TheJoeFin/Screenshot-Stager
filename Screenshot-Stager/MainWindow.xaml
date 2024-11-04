@@ -7,11 +7,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="MainWindow"
-    Width="{Binding Path=ViewModel.Width, Mode=TwoWay}"
-    Height="{Binding Path=ViewModel.Height, Mode=TwoWay}"
-    Background="{ui:ThemeResource AccentContentFillColorPrimaryBrush}"
+    Width="{Binding Width, Mode=TwoWay}"
+    Height="{Binding Height, Mode=TwoWay}"
+    Background="{ui:ThemeResource SystemAccentColorPrimaryBrush}"
+    Left="{Binding Left, Mode=TwoWay}"
     LocationChanged="Window_LocationChanged"
     SizeChanged="Window_SizeChanged"
+    Top="{Binding Top, Mode=TwoWay}"
     WindowStyle="None"
     mc:Ignorable="d">
     <Window.Resources>
@@ -51,7 +53,7 @@
                 VerticalAlignment="Top"
                 Background="{ui:ThemeResource ApplicationBackgroundBrush}"
                 Header="Screenshot Stager : Options"
-                IsExpanded="True">
+                IsExpanded="{Binding IsOptionsFlyoutOpen, Mode=TwoWay}">
                 <StackPanel HorizontalAlignment="Left" Orientation="Vertical">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -72,7 +74,7 @@
                             x:Name="WidthTB"
                             Grid.Row="0"
                             Grid.Column="1"
-                            Text="800" />
+                            Text="{Binding Width, Mode=TwoWay}" />
 
                         <Label
                             Grid.Row="1"
@@ -83,29 +85,28 @@
                             x:Name="HeightTB"
                             Grid.Row="1"
                             Grid.Column="1"
-                            Text="450" />
+                            Text="{Binding Height, Mode=TwoWay}" />
                     </Grid>
-                    <Button
-                        x:Name="SetSizeButton"
-                        Click="SetSizeButton_Click"
-                        Content="Set Stage Size" />
 
                     <Button
                         x:Name="ListWindows"
-                        Click="ListWindows_Click"
+                        Command="{Binding GetAndListWindowsCommand}"
                         Content="Refresh List of Windows" />
 
-                    <ListView x:Name="WindowList">
+                    <ListView
+                        x:Name="WindowListView"
+                        ItemsSource="{Binding WindowList, Mode=TwoWay}"
+                        SelectedItem="{Binding SelectedWindow, Mode=TwoWay}">
                         <ListView.ItemTemplate>
                             <DataTemplate DataType="local:WindowDetails">
-                                <TextBlock Tag="{Binding Path=Handle}" Text="{Binding Path=Title}" />
+                                <TextBlock Tag="{Binding Handle}" Text="{Binding Title}" />
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
 
                     <Button
                         x:Name="ChangeSizeBTN"
-                        Click="ChangeSizeBTN_Click"
+                        Command="{Binding StageSelectedWindowCommand}"
                         Content="Stage Selected Window" />
                 </StackPanel>
             </Expander>
