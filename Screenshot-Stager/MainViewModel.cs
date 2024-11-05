@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
 
@@ -14,16 +16,16 @@ public partial class MainViewModel : ObservableRecipient
     private WindowDetails? selectedWindow;
 
     [ObservableProperty]
-    private double left = 151;
+    private double left = 50;
 
     [ObservableProperty]
-    private double top = 101;
+    private double top = 30;
 
     [ObservableProperty]
-    private double width = 1001;
+    private double width = 1100;
 
     [ObservableProperty]
-    private double height = 601;
+    private double height = 900;
 
     [ObservableProperty]
     private Thickness appPadding = new(50);
@@ -32,6 +34,9 @@ public partial class MainViewModel : ObservableRecipient
     private bool isOptionsFlyoutOpen = true;
 
     private int screenshotIndex = 1;
+
+    [ObservableProperty]
+    private string filename = "fileName";
 
     public MainViewModel()
     {
@@ -52,11 +57,32 @@ public partial class MainViewModel : ObservableRecipient
         int newWindowX = (int)((Left + AppPadding.Left) / dpi);
         int newWindowY = (int)((Top + AppPadding.Top + titleBarHeight) / dpi);
         int newWindowWidth = (int)((Width - (AppPadding.Left + AppPadding.Right)) / dpi);
-        int newWindowHeight = (int)((Height - (AppPadding.Top + AppPadding.Bottom) - titleBarHeight) / dpi);
+        int newWindowHeight = (int)((Height - (AppPadding.Top + AppPadding.Bottom + titleBarHeight)) / dpi);
 
         WindowMethods.ChangeSize(window.Handle, newWindowX, newWindowY, newWindowWidth, newWindowHeight);
 
         IsOptionsFlyoutOpen = false;
+
+        Filename = $"{window.Title}-{screenshotIndex:D2}.png";
+    }
+
+    [RelayCommand]
+    public void ResetTopmost()
+    {
+        if (SelectedWindow is not WindowDetails window)
+            return;
+
+        int titleBarHeight = 42;
+
+        // get dpi of this window
+        double dpi = WindowMethods.GetScaleForHwnd(window.Handle);
+
+        int newWindowX = (int)((Left + AppPadding.Left) / dpi);
+        int newWindowY = (int)((Top + AppPadding.Top + titleBarHeight) / dpi);
+        int newWindowWidth = (int)((Width - (AppPadding.Left + AppPadding.Right)) / dpi);
+        int newWindowHeight = (int)((Height - (AppPadding.Top + AppPadding.Bottom + titleBarHeight)) / dpi);
+
+        WindowMethods.ChangeSize(window.Handle, newWindowX, newWindowY, newWindowWidth, newWindowHeight, false);
     }
 
     [RelayCommand]
@@ -99,12 +125,15 @@ public partial class MainViewModel : ObservableRecipient
 
         // save or process the screenshot as needed
         // e.g., save to file
-        string fileName = $"{window.Title}-{screenshotIndex:D2}.bmp";
-        string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), fileName);
+        string folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Stager-Files");
+        string path = Path.Combine(folderPath, Filename);
+
+        if (!Directory.Exists(folderPath))
+            Directory.CreateDirectory(folderPath);
 
         try
         {
-            screenshot.Save(path);
+            screenshot.Save(path, ImageFormat.Png);
         }
         catch (Exception ex)
         {
@@ -113,8 +142,22 @@ public partial class MainViewModel : ObservableRecipient
         finally
         {
             screenshotIndex++;
+            Filename = $"{window.Title}-{screenshotIndex:D2}.png";
+        }
+    }
+
+    [RelayCommand]
+    private void OpenScreenshotsFolder()
+    {
+        string folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Stager-Files");
+
+        if (!Directory.Exists(folderPath))
+        {
+            MessageBox.Show("No screenshots have been taken yet.", "No Screenshots", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
         }
 
+        Process.Start("explorer.exe", folderPath);
     }
 
     public static Bitmap GetRegionOfScreenAsBitmap(int x, int y, int width, int height)
