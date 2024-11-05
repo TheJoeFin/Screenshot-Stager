@@ -1,11 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
+using System.Windows.Media;
 
 namespace Screenshot_Stager;
 public partial class MainViewModel : ObservableRecipient
@@ -25,7 +27,7 @@ public partial class MainViewModel : ObservableRecipient
     private double width = 1100;
 
     [ObservableProperty]
-    private double height = 900;
+    private double height = 700;
 
     [ObservableProperty]
     private Thickness appPadding = new(50);
@@ -36,7 +38,13 @@ public partial class MainViewModel : ObservableRecipient
     private int screenshotIndex = 1;
 
     [ObservableProperty]
-    private string filename = "fileName";
+    private string filename = "screenshot-fileName";
+
+    [ObservableProperty]
+    private SolidColorBrush selectedColor = new(Colors.Black);
+
+    [ObservableProperty]
+    private string backgroundImagepath = string.Empty;
 
     public MainViewModel()
     {
@@ -93,6 +101,9 @@ public partial class MainViewModel : ObservableRecipient
 
         foreach (KeyValuePair<nint, string> window in windows)
         {
+            if (window.Value == "StagerWindow")
+                continue;
+
             WindowDetails details = new()
             {
                 Handle = window.Key,
@@ -158,6 +169,19 @@ public partial class MainViewModel : ObservableRecipient
         }
 
         Process.Start("explorer.exe", folderPath);
+    }
+
+    [RelayCommand]
+    private void PickBackgroundImage()
+    {
+        OpenFileDialog openFileDialog = new()
+        {
+            Filter = "Image files (*.png;*.jpeg;*.jpg;*.bmp)|*.png;*.jpeg;*.jpg;*.bmp|All files (*.*)|*.*",
+            Title = "Select a background image"
+        };
+
+        if (openFileDialog.ShowDialog() is true)
+            BackgroundImagepath = openFileDialog.FileName;
     }
 
     public static Bitmap GetRegionOfScreenAsBitmap(int x, int y, int width, int height)
