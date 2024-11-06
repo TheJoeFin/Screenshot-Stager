@@ -11,7 +11,7 @@
     Width="{Binding Width, Mode=TwoWay}"
     Height="{Binding Height, Mode=TwoWay}"
     Activated="Window_Activated"
-    Background="{Binding SelectedColor, Mode=OneWay}"
+    Background="{ui:ThemeResource ApplicationBackgroundBrush}"
     Closing="Window_Closing"
     Deactivated="Window_Deactivated"
     Left="{Binding Left, Mode=TwoWay}"
@@ -34,6 +34,9 @@
             <RowDefinition Height="42" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+
+        <Grid Grid.Row="1" Background="{Binding SelectedColor, Mode=OneWay}" />
+
         <Image
             x:Name="BackgroundImage"
             Grid.Row="1"
@@ -143,7 +146,7 @@
                         <ComboBox
                             x:Name="WindowListView"
                             Margin="0,10,0,0"
-                            ContextMenuOpening="WindowListView_ContextMenuOpening"
+                            DropDownOpened="WindowListView_DropDownOpened"
                             ItemsSource="{Binding WindowList, Mode=TwoWay}"
                             SelectedItem="{Binding SelectedWindow, Mode=TwoWay}"
                             SelectionChanged="WindowListView_SelectionChanged">

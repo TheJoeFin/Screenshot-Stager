@@ -72,6 +72,20 @@ public partial class MainViewModel : ObservableRecipient
         IsOptionsFlyoutOpen = false;
 
         Filename = $"{window.Title}-{screenshotIndex:D2}.png";
+        IncrementScreenshotIndex();
+    }
+
+    private void IncrementScreenshotIndex()
+    {
+        string folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Stager-Files");
+        string path = Path.Combine(folderPath, Filename);
+
+        if (File.Exists(path))
+        {
+            screenshotIndex++;
+            Filename = $"{SelectedWindow?.Title}-{screenshotIndex:D2}.png";
+            IncrementScreenshotIndex();
+        }
     }
 
     [RelayCommand]
@@ -124,7 +138,7 @@ public partial class MainViewModel : ObservableRecipient
         // get dpi of this window
         double dpi = WindowMethods.GetScaleForHwnd(window.Handle);
 
-        int gapsPadding = 7;
+        int gapsPadding = 6;
 
         int screenshotX = (int)((Left + gapsPadding) / dpi);
         int screenshotY = (int)((Top + titleBarHeight + gapsPadding) / dpi);

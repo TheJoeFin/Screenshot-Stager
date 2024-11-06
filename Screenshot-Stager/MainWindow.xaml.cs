@@ -68,13 +68,13 @@ public partial class MainWindow : Window
         Topmost = true;
     }
 
-    private void WindowListView_ContextMenuOpening(object sender, System.Windows.Controls.ContextMenuEventArgs e)
-    {
-        ViewModel.GetAndListWindowsCommand.Execute(null);
-    }
-
     private void WindowListView_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
     {
         ViewModel.StageSelectedWindow();
+    }
+
+    private void WindowListView_DropDownOpened(object sender, EventArgs e)
+    {
+        ViewModel.GetAndListWindowsCommand.Execute(null);
     }
 }
