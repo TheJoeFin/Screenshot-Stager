@@ -193,7 +193,12 @@
                 Grid.Column="3"
                 Height="40"
                 ShowMaximize="False"
-                ShowMinimize="False" />
+                ShowMinimize="False">
+                <ui:TitleBar.Icon>
+                    <ui:ImageIcon Source="/StagerIcon.ico" />
+                </ui:TitleBar.Icon>
+            </ui:TitleBar>
         </Grid>
+
     </Grid>
 </Window>

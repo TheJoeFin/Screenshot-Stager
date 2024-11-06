@@ -8,10 +8,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ApplicationIcon>StagerIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="TreeBackground.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="StagerIcon.ico" />
   </ItemGroup>
 
   <ItemGroup>
