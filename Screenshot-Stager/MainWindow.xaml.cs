@@ -19,6 +19,10 @@ public partial class MainWindow : Window
         DWMWINDOWATTRIBUTE attribute = DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
         DWM_WINDOW_CORNER_PREFERENCE preference = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_DONOTROUND;
         DwmSetWindowAttribute(hWnd, attribute, ref preference, sizeof(uint));
+
+        ColorPicker.Color.RGB_R = 0;
+        ColorPicker.Color.RGB_G = 0;
+        ColorPicker.Color.RGB_B = 139;
     }
 
 

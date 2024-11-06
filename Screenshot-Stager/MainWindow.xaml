@@ -11,6 +11,7 @@
     Title="StagerWindow"
     Width="{Binding Width, Mode=TwoWay}"
     Height="{Binding Height, Mode=TwoWay}"
+    d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
     Activated="Window_Activated"
     Background="{ui:ThemeResource ApplicationBackgroundBrush}"
     Closing="Window_Closing"
@@ -84,6 +85,7 @@
                                 VerticalAlignment="Center"
                                 Text="Background Color" />
                             <pix:PortableColorPicker
+                                x:Name="ColorPicker"
                                 Grid.Row="0"
                                 Grid.Column="1"
                                 Height="32"
@@ -135,6 +137,10 @@
                                 Grid.Column="1"
                                 Text="{Binding Height, Mode=TwoWay}" />
                         </Grid>
+                        <ui:TextBlock
+                            Margin="0,10,0,0"
+                            FontTypography="Body"
+                            Text="{Binding OutputImageSizeText, Mode=OneWay}" />
 
                         <ui:TextBlock
                             Margin="0,10,0,0"

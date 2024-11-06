@@ -6,7 +6,9 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Security.Cryptography.Xml;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Media;
 
 namespace Screenshot_Stager;
@@ -41,14 +43,44 @@ public partial class MainViewModel : ObservableRecipient
     private string filename = "screenshot-fileName";
 
     [ObservableProperty]
-    private SolidColorBrush selectedColor = new(Colors.Black);
+    private SolidColorBrush selectedColor = new(Colors.DarkBlue);
 
     [ObservableProperty]
     private string backgroundImagepath = string.Empty;
 
+    [ObservableProperty]
+    private string outputImageSizeText = string.Empty;
+
+    private int titleBarHeight = 42;
+    private int windowEdgeBuffer = 6;
+
     public MainViewModel()
     {
         GetAndListWindows();
+        SetOutputImageSizeText();
+    }
+
+    private void SetOutputImageSizeText()
+    {
+        nint? windowPointer = null;
+        IDictionary<nint, string> windows = WindowMethods.GetOpenWindows();
+
+        foreach (KeyValuePair<nint, string> window in windows)
+        {
+            if (window.Value == "StagerWindow")
+            {
+                windowPointer = window.Key;
+                break;
+            }
+        }
+
+        if (windowPointer is null)
+            return;
+
+        double dpi = WindowMethods.GetScaleForHwnd(windowPointer.Value);
+        int outputImageWidth = (int)((Width - (windowEdgeBuffer * 2)) / dpi);
+        int outputImageHeight = (int)((Height - (windowEdgeBuffer * 2) - titleBarHeight) / dpi);
+        OutputImageSizeText = $"Screenshot Size: {outputImageWidth} x {outputImageHeight}";
     }
 
     [RelayCommand]
@@ -56,8 +88,6 @@ public partial class MainViewModel : ObservableRecipient
     {
         if (SelectedWindow is not WindowDetails window)
             return;
-
-        int titleBarHeight = 42;
 
         // get dpi of this window
         double dpi = WindowMethods.GetScaleForHwnd(window.Handle);
@@ -73,6 +103,7 @@ public partial class MainViewModel : ObservableRecipient
 
         Filename = $"{window.Title}-{screenshotIndex:D2}.png";
         IncrementScreenshotIndex();
+        SetOutputImageSizeText();
     }
 
     private void IncrementScreenshotIndex()
@@ -93,8 +124,6 @@ public partial class MainViewModel : ObservableRecipient
     {
         if (SelectedWindow is not WindowDetails window)
             return;
-
-        int titleBarHeight = 42;
 
         // get dpi of this window
         double dpi = WindowMethods.GetScaleForHwnd(window.Handle);
@@ -133,17 +162,13 @@ public partial class MainViewModel : ObservableRecipient
         if (SelectedWindow is not WindowDetails window)
             return;
 
-        int titleBarHeight = 42;
-
         // get dpi of this window
         double dpi = WindowMethods.GetScaleForHwnd(window.Handle);
 
-        int gapsPadding = 6;
-
-        int screenshotX = (int)((Left + gapsPadding) / dpi);
-        int screenshotY = (int)((Top + titleBarHeight + gapsPadding) / dpi);
-        int screenshotWidth = (int)((Width - (2 * gapsPadding)) / dpi);
-        int screenshotHeight = (int)((Height - ((2 * gapsPadding) + titleBarHeight)) / dpi);
+        int screenshotX = (int)((Left + windowEdgeBuffer) / dpi);
+        int screenshotY = (int)((Top + titleBarHeight + windowEdgeBuffer) / dpi);
+        int screenshotWidth = (int)((Width - (2 * windowEdgeBuffer)) / dpi);
+        int screenshotHeight = (int)((Height - ((2 * windowEdgeBuffer) + titleBarHeight)) / dpi);
 
         // take a screenshot of the specified region
         Bitmap screenshot = GetRegionOfScreenAsBitmap(screenshotX, screenshotY, screenshotWidth, screenshotHeight);
