@@ -2,13 +2,18 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.20348.0</TargetFramework>
     <RootNamespace>Screenshot_Stager</RootNamespace>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ApplicationIcon>StagerIcon.ico</ApplicationIcon>
+    <Platforms>x86;x64;arm64</Platforms>
+    <RuntimeIdentifiers>win-arm64;win-x86;win-x64</RuntimeIdentifiers>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <WindowsSdkPackageVersion>10.0.20348.47</WindowsSdkPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>

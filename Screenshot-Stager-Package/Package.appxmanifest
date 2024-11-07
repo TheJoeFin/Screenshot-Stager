@@ -7,13 +7,13 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="7f5a6687-b324-4ed7-b274-8d02a64fd8af"
-    Publisher="CN=josep"
+    Name="40087JoeFinApps.ScreenshotStager"
+    Publisher="CN=153F3B0F-BA3D-4964-8098-71AC78A1DF6A"
     Version="1.0.0.0" />
 
   <Properties>
-    <DisplayName>Screenshot-Stager-Package</DisplayName>
-    <PublisherDisplayName>josep</PublisherDisplayName>
+    <DisplayName>Screenshot Stager</DisplayName>
+    <PublisherDisplayName>JoeFinApps</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
 
