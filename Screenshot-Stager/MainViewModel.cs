@@ -6,9 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Security.Cryptography.Xml;
 using System.Windows;
-using System.Windows.Interop;
 using System.Windows.Media;
 
 namespace Screenshot_Stager;
@@ -32,6 +30,12 @@ public partial class MainViewModel : ObservableRecipient
     private double height = 700;
 
     [ObservableProperty]
+    private double outputImageWidth = 2200;
+
+    [ObservableProperty]
+    private double outputImageHeight = 1300;
+
+    [ObservableProperty]
     private Thickness appPadding = new(50);
 
     [ObservableProperty]
@@ -53,14 +57,29 @@ public partial class MainViewModel : ObservableRecipient
 
     private int titleBarHeight = 42;
     private int windowEdgeBuffer = 6;
+    private bool isSettingWindowSize = false;
 
     public MainViewModel()
     {
-        GetAndListWindows();
+    }
+
+    partial void OnWidthChanged(double value)
+    {
+        if (isSettingWindowSize)
+            return;
+
         SetOutputImageSizeText();
     }
 
-    private void SetOutputImageSizeText()
+    partial void OnHeightChanged(double value)
+    {
+        if (isSettingWindowSize)
+            return;
+
+        SetOutputImageSizeText();
+    }
+
+    public void SetOutputImageSizeText()
     {
         nint? windowPointer = null;
         IDictionary<nint, string> windows = WindowMethods.GetOpenWindows();
@@ -78,9 +97,34 @@ public partial class MainViewModel : ObservableRecipient
             return;
 
         double dpi = WindowMethods.GetScaleForHwnd(windowPointer.Value);
-        int outputImageWidth = (int)((Width - (windowEdgeBuffer * 2)) / dpi);
-        int outputImageHeight = (int)((Height - (windowEdgeBuffer * 2) - titleBarHeight) / dpi);
-        OutputImageSizeText = $"Screenshot Size: {outputImageWidth} x {outputImageHeight}";
+        OutputImageWidth = (int)((Width + (windowEdgeBuffer * 2)) / dpi);
+        OutputImageHeight = (int)((Height + (windowEdgeBuffer * 2) + titleBarHeight) / dpi);
+    }
+
+    [RelayCommand]
+    public void SetWindowSizeText()
+    {
+        nint? windowPointer = null;
+        IDictionary<nint, string> windows = WindowMethods.GetOpenWindows();
+
+        foreach (KeyValuePair<nint, string> window in windows)
+        {
+            if (window.Value == "StagerWindow")
+            {
+                windowPointer = window.Key;
+                break;
+            }
+        }
+
+        if (windowPointer is null)
+            return;
+
+        isSettingWindowSize = true;
+        double dpi = WindowMethods.GetScaleForHwnd(windowPointer.Value);
+        Width = (int)((OutputImageWidth * dpi) + (windowEdgeBuffer * 2));
+        Height = (int)((OutputImageHeight * dpi) + (windowEdgeBuffer * 2) + titleBarHeight);
+        OutputImageSizeText = $"Screenshot Size: {Width} x {Height}";
+        isSettingWindowSize = false;
     }
 
     [RelayCommand]
@@ -91,7 +135,7 @@ public partial class MainViewModel : ObservableRecipient
 
         // get dpi of this window
         double dpi = WindowMethods.GetScaleForHwnd(window.Handle);
-        
+
         int newWindowX = (int)((Left + AppPadding.Left) / dpi);
         int newWindowY = (int)((Top + AppPadding.Top + titleBarHeight) / dpi);
         int newWindowWidth = (int)((Width - (AppPadding.Left + AppPadding.Right)) / dpi);
@@ -103,7 +147,6 @@ public partial class MainViewModel : ObservableRecipient
 
         Filename = $"{window.Title}-{screenshotIndex:D2}.png";
         IncrementScreenshotIndex();
-        SetOutputImageSizeText();
     }
 
     private void IncrementScreenshotIndex()
@@ -197,7 +240,7 @@ public partial class MainViewModel : ObservableRecipient
     }
 
     [RelayCommand]
-    private void OpenScreenshotsFolder()
+    private static void OpenScreenshotsFolder()
     {
         string folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Stager-Files");
 

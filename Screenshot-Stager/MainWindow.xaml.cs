@@ -81,4 +81,9 @@ public partial class MainWindow : Window
     {
         ViewModel.GetAndListWindowsCommand.Execute(null);
     }
+
+    private void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+        ViewModel.SetWindowSizeText();
+    }
 }

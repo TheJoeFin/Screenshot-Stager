@@ -17,6 +17,7 @@
     Closing="Window_Closing"
     Deactivated="Window_Deactivated"
     Left="{Binding Left, Mode=TwoWay}"
+    Loaded="Window_Loaded"
     LocationChanged="Window_LocationChanged"
     SizeChanged="Window_SizeChanged"
     Top="{Binding Top, Mode=TwoWay}"
@@ -31,6 +32,23 @@
         </Style>
 
         <converters:IsNullConverter x:Key="IsNull" />
+
+        <Style x:Key="DefaultColorPickerStyle" TargetType="UserControl">
+            <Style.Resources>
+                <ResourceDictionary>
+                    <Style TargetType="Label">
+                        <Setter Property="Foreground" Value="Snow" />
+                    </Style>
+                    <Style TargetType="Grid">
+                        <Style.Triggers>
+                            <Trigger Property="Name" Value="MainGrid">
+                                <Setter Property="Background" Value="#252525" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ResourceDictionary>
+            </Style.Resources>
+        </Style>
     </Window.Resources>
 
     <Grid>
@@ -90,7 +108,8 @@
                                 Grid.Column="1"
                                 Height="32"
                                 Margin="0,10,0,0"
-                                ColorChanged="PortableColorPicker_ColorChanged" />
+                                ColorChanged="PortableColorPicker_ColorChanged"
+                                Style="{StaticResource DefaultColorPickerStyle}" />
                             <ui:Button
                                 Name="OpenBackgroundButton"
                                 Grid.Row="1"
@@ -104,7 +123,7 @@
                         <ui:TextBlock
                             Margin="0,10,0,0"
                             FontTypography="Subtitle"
-                            Text="Stage Window Size" />
+                            Text="Output Screenshot Size" />
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
@@ -124,7 +143,7 @@
                                 x:Name="WidthTB"
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                Text="{Binding Width, Mode=TwoWay}" />
+                                Text="{Binding OutputImageWidth, Mode=TwoWay}" />
 
                             <Label
                                 Grid.Row="1"
@@ -135,12 +154,15 @@
                                 x:Name="HeightTB"
                                 Grid.Row="1"
                                 Grid.Column="1"
-                                Text="{Binding Height, Mode=TwoWay}" />
+                                Text="{Binding OutputImageHeight, Mode=TwoWay}" />
                         </Grid>
-                        <ui:TextBlock
+
+                        <ui:Button
+                            x:Name="SetWindowSizeButton"
                             Margin="0,10,0,0"
-                            FontTypography="Body"
-                            Text="{Binding OutputImageSizeText, Mode=OneWay}" />
+                            Command="{Binding SetWindowSizeTextCommand}"
+                            Content="Set Window Size"
+                            Icon="{ui:SymbolIcon Symbol=Window24}" />
 
                         <ui:TextBlock
                             Margin="0,10,0,0"
