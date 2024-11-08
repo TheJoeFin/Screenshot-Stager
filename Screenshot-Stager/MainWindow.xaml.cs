@@ -3,6 +3,7 @@ using static Screenshot_Stager.WindowMethods;
 using System.Windows.Interop;
 using System.Windows.Media;
 using ColorPicker;
+using System.Runtime.InteropServices;
 
 namespace Screenshot_Stager;
 
@@ -15,10 +16,18 @@ public partial class MainWindow : Window
         DataContext = ViewModel;
         InitializeComponent();
 
-        IntPtr hWnd = new WindowInteropHelper(GetWindow(this)).EnsureHandle();
-        DWMWINDOWATTRIBUTE attribute = DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
-        DWM_WINDOW_CORNER_PREFERENCE preference = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_DONOTROUND;
-        DwmSetWindowAttribute(hWnd, attribute, ref preference, sizeof(uint));
+
+        // if Windows 11 remove rounded corners
+        OSVERSIONINFOEX oSVERSIONINFOEX = new();
+        RtlGetVersion(ref oSVERSIONINFOEX);
+
+        if (oSVERSIONINFOEX.MajorVersion > 10)
+        {
+            IntPtr hWnd = new WindowInteropHelper(GetWindow(this)).EnsureHandle();
+            DWMWINDOWATTRIBUTE attribute = DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
+            DWM_WINDOW_CORNER_PREFERENCE preference = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_DONOTROUND;
+            DwmSetWindowAttribute(hWnd, attribute, ref preference, sizeof(uint));
+        }
 
         ColorPicker.Color.RGB_R = 0;
         ColorPicker.Color.RGB_G = 0;
@@ -72,6 +81,12 @@ public partial class MainWindow : Window
         Topmost = true;
     }
 
+    private void SettingsExpander_Collapsed(object sender, RoutedEventArgs e)
+    {
+        Topmost = false;
+        ViewModel.StageSelectedWindow();
+    }
+
     private void WindowListView_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
     {
         ViewModel.StageSelectedWindow();
@@ -85,5 +100,25 @@ public partial class MainWindow : Window
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
         ViewModel.SetWindowSizeText();
+    }
+
+    [DllImport("ntdll.dll")]
+    internal static extern UInt32 RtlGetVersion(ref OSVERSIONINFOEX VersionInformation);
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct OSVERSIONINFOEX
+    {
+        public UInt32 OSVersionInfoSize;
+        public UInt32 MajorVersion;
+        public UInt32 MinorVersion;
+        public UInt32 BuildNumber;
+        public UInt32 PlatformId;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+        public String CSDVersion;
+        public UInt16 ServicePackMajor;
+        public UInt16 ServicePackMinor;
+        public UInt16 SuiteMask;
+        public Byte ProductType;
+        public Byte Reserved;
     }
 }

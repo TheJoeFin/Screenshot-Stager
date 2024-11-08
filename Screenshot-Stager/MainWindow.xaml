@@ -79,6 +79,7 @@
                 VerticalAlignment="Top"
                 Background="{ui:ThemeResource ApplicationBackgroundBrush}"
                 Expanded="Expander_Expanded"
+                Collapsed="SettingsExpander_Collapsed"
                 Header="Screenshot Stager : Options"
                 IsExpanded="{Binding IsOptionsFlyoutOpen, Mode=TwoWay}">
                 <Border Padding="20" Background="{ui:ThemeResource ApplicationBackgroundBrush}">

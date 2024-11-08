@@ -50,13 +50,13 @@ public partial class MainViewModel : ObservableRecipient
     private SolidColorBrush selectedColor = new(Colors.DarkBlue);
 
     [ObservableProperty]
-    private string backgroundImagepath = string.Empty;
+    private string backgroundImagePath = string.Empty;
 
     [ObservableProperty]
     private string outputImageSizeText = string.Empty;
 
-    private int titleBarHeight = 42;
-    private int windowEdgeBuffer = 6;
+    readonly private int titleBarHeight = 42;
+    readonly private int windowEdgeBuffer = 7;
     private bool isSettingWindowSize = false;
 
     public MainViewModel()
@@ -121,8 +121,8 @@ public partial class MainViewModel : ObservableRecipient
 
         isSettingWindowSize = true;
         double dpi = WindowMethods.GetScaleForHwnd(windowPointer.Value);
-        Width = (int)((OutputImageWidth * dpi) + (windowEdgeBuffer * 2));
-        Height = (int)((OutputImageHeight * dpi) + (windowEdgeBuffer * 2) + titleBarHeight);
+        Width = (int)Math.Round((OutputImageWidth * dpi) + (windowEdgeBuffer * 2), 0, MidpointRounding.AwayFromZero);
+        Height = (int)Math.Round((OutputImageHeight * dpi) + (windowEdgeBuffer * 2) + titleBarHeight, 0, MidpointRounding.AwayFromZero);
         OutputImageSizeText = $"Screenshot Size: {Width} x {Height}";
         isSettingWindowSize = false;
     }
@@ -263,7 +263,7 @@ public partial class MainViewModel : ObservableRecipient
         };
 
         if (openFileDialog.ShowDialog() is true)
-            BackgroundImagepath = openFileDialog.FileName;
+            BackgroundImagePath = openFileDialog.FileName;
     }
 
     public static Bitmap GetRegionOfScreenAsBitmap(int x, int y, int width, int height)
