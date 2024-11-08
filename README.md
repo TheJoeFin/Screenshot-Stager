@@ -8,8 +8,8 @@
   Take perfect Windows app screenshots.
 </p>
 <p align="center">
-  <a href="https://www.microsoft.com/store/productId/9PPHK725194R?cid=ScreenshotStagerGitHub" target="_blank">
-    <img src="images/storeBadge.png" width="200" alt="Store link" />
+  <a href="https://apps.microsoft.com/detail/9pphk725194r?cid=ScreenshotStagerGitHub" target="_blank">
+    <img src="Images/storeBadge.png" width="200" alt="Store link" />
   </a>
 </p>
 
