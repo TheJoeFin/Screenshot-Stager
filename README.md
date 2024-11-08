@@ -1,3 +1,19 @@
+<p align="center">
+  <img width="128" align="center" src="Images\Screenshot-Stager.png">
+</p>
+<h1 align="center">
+  Screenshot Stager
+</h1>
+<p align="center">
+  Take perfect Windows app screenshots.
+</p>
+<p align="center">
+  <a href="https://www.microsoft.com/store/productId/9PPHK725194R?cid=ScreenshotStagerGitHub" target="_blank">
+    <img src="images/storeBadge.png" width="200" alt="Store link" />
+  </a>
+</p>
+
+
 # Screenshot Stager
 ![Screenshot Stager Screenshot](Images/v1-Screenshot.png)
 Take consistent screenshots of you Windows apps for the app submission process.
