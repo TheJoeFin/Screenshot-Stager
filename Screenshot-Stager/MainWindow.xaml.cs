@@ -17,11 +17,11 @@ public partial class MainWindow : Window
         InitializeComponent();
 
 
-        // if Windows 11 remove rounded corners
+        // if Windows 11, remove rounded corners
         OSVERSIONINFOEX oSVERSIONINFOEX = new();
         RtlGetVersion(ref oSVERSIONINFOEX);
 
-        if (oSVERSIONINFOEX.MajorVersion > 10)
+        if (oSVERSIONINFOEX.BuildNumber >= 22000)
         {
             IntPtr hWnd = new WindowInteropHelper(GetWindow(this)).EnsureHandle();
             DWMWINDOWATTRIBUTE attribute = DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
