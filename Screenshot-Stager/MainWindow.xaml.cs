@@ -19,7 +19,7 @@ public partial class MainWindow : Window
 
         // if Windows 11, remove rounded corners
         OSVERSIONINFOEX oSVERSIONINFOEX = new();
-        RtlGetVersion(ref oSVERSIONINFOEX);
+        _ = RtlGetVersion(ref oSVERSIONINFOEX);
 
         if (oSVERSIONINFOEX.BuildNumber >= 22000)
         {

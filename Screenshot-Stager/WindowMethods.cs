@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Text;
 using HWND = System.IntPtr;
 
@@ -24,6 +25,9 @@ public static partial class WindowMethods
 
             StringBuilder builder = new(length);
             _ = GetWindowText(hWnd, builder, length + 1);
+
+            bool isAltTab = IsWindowInAltTab(hWnd, builder.ToString());
+            if (!isAltTab) return true;
 
             windows[hWnd] = builder.ToString();
             return true;
@@ -101,4 +105,59 @@ public static partial class WindowMethods
 
     [DllImport("USER32.DLL")]
     private static extern bool ShowWindow(HWND hWnd, int nCmdShow);
+
+    [DllImport("USER32.DLL")]
+    public static extern bool GetWindowRect(HWND hWnd, out RECT lpRect);
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct RECT
+    {
+        public int left;
+        public int top;
+        public int right;
+        public int bottom;
+    }
+
+    private const int WS_EX_TOOLWINDOW = 0x00000080;
+    private const int WS_EX_APPWINDOW = 0x00040000;
+    private const int WS_EX_NOREDIRECTIONBITMAP = 0x00200000;
+
+    [DllImport("user32.dll")]
+    private static extern IntPtr GetAncestor(IntPtr hWnd, uint gaFlags);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+    private const int GWL_EXSTYLE = -20;
+    private const int GA_ROOT = 2;
+
+    public static bool IsWindowInAltTab(IntPtr hWnd, string windowName)
+    {
+        //// Check if the window is visible
+        //if (!IsWindowVisible(hWnd))
+        //    return false;
+
+        // Check if the window is a top-level window
+        IntPtr root = GetAncestor(hWnd, GA_ROOT);
+        if (root != hWnd)
+            return false;
+
+        // Get the extended window styles
+        int exStyle = GetWindowLong(hWnd, GWL_EXSTYLE);
+        string exStyleHexString = exStyle.ToString("X");
+
+        // Exclude tool windows
+        if ((exStyle & WS_EX_TOOLWINDOW) != 0)
+            return false;
+
+        // UWP apps break here
+        if (exStyle is WS_EX_NOREDIRECTIONBITMAP)
+            return false;
+
+        // Include app windows or those without the tool window style
+        // if ((exStyle & WS_EX_APPWINDOW) == 0 && (exStyle & WS_EX_TOOLWINDOW) == 0)
+        //     return false;
+
+        return true;
+    }
 }
