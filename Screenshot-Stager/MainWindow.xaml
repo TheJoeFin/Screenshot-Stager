@@ -205,7 +205,8 @@
                 Command="{Binding TakeScreenshotCommand}"
                 Content="Screenshot"
                 Icon="{ui:SymbolIcon Symbol=Camera24}"
-                IsEnabled="{Binding SelectedWindow, Mode=OneWay, Converter={StaticResource IsNull}, ConverterParameter=true}" />
+                IsEnabled="{Binding SelectedWindow, Mode=OneWay, Converter={StaticResource IsNull}, ConverterParameter=true}"
+                ToolTip="Take a screenshot (Shift + Ctrl + Alt + S)" />
 
             <ui:Button
                 Name="SaveButton"

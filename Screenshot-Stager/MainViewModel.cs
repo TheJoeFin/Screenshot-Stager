@@ -7,6 +7,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
+using GlobalHotKeys;
+using GlobalHotKeys.Native.Types;
 using System.Windows.Media;
 using Windows.Win32.Foundation;
 
@@ -62,6 +64,10 @@ public partial class MainViewModel : ObservableRecipient
 
     public MainViewModel()
     {
+        HotKeyManager hotKeyManager = new();
+        IRegistration registrations = hotKeyManager.Register(VirtualKeyCode.KEY_1, Modifiers.Control | Modifiers.Shift);
+        hotKeyManager.HotKeyPressed.Subscribe(_ => TakeScreenshot());
+
     }
 
     partial void OnWidthChanged(double value)
