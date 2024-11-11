@@ -8,6 +8,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
 using System.Windows.Media;
+using Windows.Win32.Foundation;
 
 namespace Screenshot_Stager;
 public partial class MainViewModel : ObservableRecipient
@@ -24,10 +25,10 @@ public partial class MainViewModel : ObservableRecipient
     private double top = 30;
 
     [ObservableProperty]
-    private double width = 1100;
+    private double width = 1102;
 
     [ObservableProperty]
-    private double height = 700;
+    private double height = 692;
 
     [ObservableProperty]
     private double outputImageWidth = 2200;
@@ -55,8 +56,8 @@ public partial class MainViewModel : ObservableRecipient
     [ObservableProperty]
     private string outputImageSizeText = string.Empty;
 
-    readonly private int titleBarHeight = 42;
-    readonly private int windowEdgeBuffer = 7;
+    readonly private int titleBarHeight = 40;
+    readonly private int windowEdgeBuffer = 1;
     private bool isSettingWindowSize = false;
 
     public MainViewModel()
@@ -81,10 +82,10 @@ public partial class MainViewModel : ObservableRecipient
 
     public void SetOutputImageSizeText()
     {
-        nint? windowPointer = null;
-        IDictionary<nint, string> windows = WindowMethods.GetOpenWindows();
+        HWND? windowPointer = null;
+        IDictionary<HWND, string> windows = WindowMethods.GetOpenWindows();
 
-        foreach (KeyValuePair<nint, string> window in windows)
+        foreach (KeyValuePair<HWND, string> window in windows)
         {
             if (window.Value == "StagerWindow")
             {
@@ -97,17 +98,17 @@ public partial class MainViewModel : ObservableRecipient
             return;
 
         double dpi = WindowMethods.GetScaleForHwnd(windowPointer.Value);
-        OutputImageWidth = (int)((Width + (windowEdgeBuffer * 2)) / dpi);
-        OutputImageHeight = (int)((Height + (windowEdgeBuffer * 2) + titleBarHeight) / dpi);
+        OutputImageWidth = (int)((Width) / dpi);
+        OutputImageHeight = (int)((Height + titleBarHeight) / dpi);
     }
 
     [RelayCommand]
     public void SetWindowSizeText()
     {
-        nint? windowPointer = null;
-        IDictionary<nint, string> windows = WindowMethods.GetOpenWindows();
+        HWND? windowPointer = null;
+        IDictionary<HWND, string> windows = WindowMethods.GetOpenWindows();
 
-        foreach (KeyValuePair<nint, string> window in windows)
+        foreach (KeyValuePair<HWND, string> window in windows)
         {
             if (window.Value == "StagerWindow")
             {
@@ -135,11 +136,16 @@ public partial class MainViewModel : ObservableRecipient
 
         // get dpi of this window
         double dpi = WindowMethods.GetScaleForHwnd(window.Handle);
+        // Rect monitorRect = WindowMethods.GetMonitorRect(window.Handle);
+        // int monitorX = (int)(monitorRect.X);
+        // int monitorY = (int)(monitorRect.Y);
 
         int newWindowX = (int)((Left + AppPadding.Left) / dpi);
         int newWindowY = (int)((Top + AppPadding.Top + titleBarHeight) / dpi);
         int newWindowWidth = (int)((Width - (AppPadding.Left + AppPadding.Right)) / dpi);
         int newWindowHeight = (int)((Height - (AppPadding.Top + AppPadding.Bottom + titleBarHeight)) / dpi);
+
+        Debug.WriteLine($"x: {newWindowX}, y: {newWindowY}, width: {newWindowWidth}, height: {newWindowHeight}");
 
         WindowMethods.ChangeSize(window.Handle, newWindowX, newWindowY, newWindowWidth, newWindowHeight);
 
@@ -183,9 +189,9 @@ public partial class MainViewModel : ObservableRecipient
     private void GetAndListWindows()
     {
         WindowList.Clear();
-        IDictionary<nint, string> windows = WindowMethods.GetOpenWindows();
+        IDictionary<HWND, string> windows = WindowMethods.GetOpenWindows();
 
-        foreach (KeyValuePair<nint, string> window in windows)
+        foreach (KeyValuePair<HWND, string> window in windows)
         {
             if (window.Value == "StagerWindow")
                 continue;

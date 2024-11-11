@@ -1,4 +1,4 @@
-﻿<Window
+﻿<ui:FluentWindow
     x:Class="Screenshot_Stager.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -21,6 +21,7 @@
     LocationChanged="Window_LocationChanged"
     SizeChanged="Window_SizeChanged"
     Top="{Binding Top, Mode=TwoWay}"
+    WindowCornerPreference="DoNotRound"
     WindowStyle="None"
     mc:Ignorable="d">
     <Window.Resources>
@@ -62,7 +63,7 @@
         <Image
             x:Name="BackgroundImage"
             Grid.Row="1"
-            Source="{Binding BackgroundImagepath, Mode=OneWay}"
+            Source="{Binding BackgroundImagePath, Mode=OneWay}"
             Stretch="UniformToFill" />
 
         <Grid Grid.RowSpan="2">
@@ -78,8 +79,8 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Background="{ui:ThemeResource ApplicationBackgroundBrush}"
-                Expanded="Expander_Expanded"
                 Collapsed="SettingsExpander_Collapsed"
+                Expanded="Expander_Expanded"
                 Header="Screenshot Stager : Options"
                 IsExpanded="{Binding IsOptionsFlyoutOpen, Mode=TwoWay}">
                 <Border Padding="20" Background="{ui:ThemeResource ApplicationBackgroundBrush}">
@@ -169,11 +170,6 @@
                             Margin="0,10,0,0"
                             FontTypography="Subtitle"
                             Text="Target Window" />
-                        <Button
-                            x:Name="ListWindows"
-                            Command="{Binding GetAndListWindowsCommand}"
-                            Content="Refresh List of Windows"
-                            Visibility="Collapsed" />
 
                         <ComboBox
                             x:Name="WindowListView"
@@ -234,4 +230,4 @@
         </Grid>
 
     </Grid>
-</Window>
+</ui:FluentWindow>
