@@ -11,11 +11,18 @@ using GlobalHotKeys;
 using GlobalHotKeys.Native.Types;
 using System.Windows.Media;
 using Windows.Win32.Foundation;
+using System.Text.RegularExpressions;
+using System.Text;
 
 namespace Screenshot_Stager;
 public partial class MainViewModel : ObservableRecipient
 {
     public ObservableCollection<WindowDetails> WindowList { get; set; } = [];
+
+    public ObservableCollection<string> RecentCaptures { get; set; } = [];
+
+    [ObservableProperty]
+    private int recentPaneWidth = 0;
 
     [ObservableProperty]
     private WindowDetails? selectedWindow;
@@ -157,7 +164,7 @@ public partial class MainViewModel : ObservableRecipient
 
         IsOptionsFlyoutOpen = false;
 
-        Filename = $"{window.Title}-{screenshotIndex:D2}.png";
+        Filename = $"{window.Title.MakePathSafe()}-{screenshotIndex:D2}.png";
         IncrementScreenshotIndex();
     }
 
@@ -169,7 +176,7 @@ public partial class MainViewModel : ObservableRecipient
         if (File.Exists(path))
         {
             screenshotIndex++;
-            Filename = $"{SelectedWindow?.Title}-{screenshotIndex:D2}.png";
+            Filename = $"{SelectedWindow?.Title.MakePathSafe()}-{screenshotIndex:D2}.png";
             IncrementScreenshotIndex();
         }
     }
@@ -239,6 +246,12 @@ public partial class MainViewModel : ObservableRecipient
         try
         {
             screenshot.Save(path, ImageFormat.Png);
+
+            App.Current.Dispatcher.Invoke((Action)delegate
+            {
+                RecentCaptures.Insert(0, path);
+                RecentPaneWidth = 50 * RecentCaptures.Count;
+            });
         }
         catch (Exception ex)
         {

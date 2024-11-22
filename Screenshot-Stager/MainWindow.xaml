@@ -71,6 +71,7 @@
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Expander
@@ -206,7 +207,7 @@
                 Content="Screenshot"
                 Icon="{ui:SymbolIcon Symbol=Camera24}"
                 IsEnabled="{Binding SelectedWindow, Mode=OneWay, Converter={StaticResource IsNull}, ConverterParameter=true}"
-                ToolTip="Take a screenshot (Shift + Ctrl + Alt + S)" />
+                ToolTip="Take a screenshot (Shift + Ctrl + 1)" />
 
             <ui:Button
                 Name="SaveButton"
@@ -218,9 +219,37 @@
                 Command="{Binding OpenScreenshotsFolderCommand}"
                 Icon="{ui:SymbolIcon Symbol=FolderOpen24}" />
 
+            <ListView
+                x:Name="recentImages"
+                Grid.Column="3"
+                Width="{Binding RecentPaneWidth, Mode=OneWay}"
+                Height="40"
+                MaxWidth="300"
+                VerticalAlignment="Top"
+                VerticalContentAlignment="Center"
+                Background="Transparent"
+                BorderThickness="0"
+                ItemsSource="{Binding RecentCaptures, Mode=OneWay}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Image
+                            Width="32"
+                            Height="32"
+                            MouseDown="Image_MouseDown"
+                            Source="{Binding}"
+                            ToolTip="{Binding}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+            </ListView>
+
             <ui:TitleBar
                 Title="{Binding Filename, Mode=OneWay}"
-                Grid.Column="3"
+                Grid.Column="4"
                 Height="40"
                 ShowMaximize="False"
                 ShowMinimize="False">

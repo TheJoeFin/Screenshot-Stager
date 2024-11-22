@@ -1,12 +1,18 @@
 ﻿using ColorPicker;
+using Screenshot_Stager.Models;
+using System.Drawing;
 using System.Windows;
 using System.Windows.Media;
 using Wpf.Ui.Controls;
+using static Windows.Win32.PInvoke;
+using Windows.Win32.Graphics.Gdi;
 
 namespace Screenshot_Stager;
 
 public partial class MainWindow : FluentWindow
 {
+    private HGDIOBJ hBitmap;
+
     public MainViewModel ViewModel { get; } = new();
 
     public MainWindow()
@@ -32,6 +38,7 @@ public partial class MainWindow : FluentWindow
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
         ViewModel.ResetTopmost();
+        DeleteObject(hBitmap);
     }
 
     private void Window_Deactivated(object sender, EventArgs e)
@@ -52,7 +59,7 @@ public partial class MainWindow : FluentWindow
             return;
 
         ViewModel.SelectedColor = new SolidColorBrush(
-            Color.FromArgb(
+            System.Windows.Media.Color.FromArgb(
                 (byte)picker.Color.A,
                 (byte)picker.Color.RGB_R,
                 (byte)picker.Color.RGB_G,
@@ -84,5 +91,32 @@ public partial class MainWindow : FluentWindow
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
         ViewModel.SetWindowSizeText();
+    }
+
+    private void Image_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        // get the data from the data context of the item that was clicked
+        if (sender is not System.Windows.Controls.Image element)
+            return;
+
+        if (element.DataContext is not string tempPath)
+            return;
+        
+        Bitmap bitmap = new(tempPath);
+        hBitmap = (HGDIOBJ)bitmap.GetHbitmap();
+
+        try
+        {
+            // DoDragDrop with file thumbnail as drag image
+            System.Runtime.InteropServices.ComTypes.IDataObject dataObject = DragDataObject.FromFile(tempPath);
+            dataObject.SetDragImage(hBitmap, 100, 100);
+            DragDrop.DoDragDrop(this, dataObject, DragDropEffects.Copy);
+        }
+        catch
+        {
+            // DoDragDrop without drag image
+            IDataObject dataObject = new DataObject(DataFormats.FileDrop, new[] { tempPath });
+            DragDrop.DoDragDrop(this, dataObject, DragDropEffects.Copy);
+        }
     }
 }
