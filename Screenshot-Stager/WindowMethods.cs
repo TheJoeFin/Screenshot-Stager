@@ -7,11 +7,8 @@ using static Windows.Win32.PInvoke;
 
 namespace Screenshot_Stager;
 
-/// <summary>Contains functionality to get all the open windows.</summary>
 public static partial class WindowMethods
 {
-    /// <summary>Returns a dictionary that contains the handle and title of all the open windows.</summary>
-    /// <returns>A dictionary that contains the handle and title of all the open windows.</returns>
     internal static IDictionary<HWND, string> GetOpenWindows()
     {
         HWND shellWindow = GetShellWindow();

@@ -9,18 +9,22 @@
     xmlns:pix="clr-namespace:ColorPicker;assembly=ColorPicker"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="StagerWindow"
-    Width="{Binding Width, Mode=TwoWay}"
-    Height="{Binding Height, Mode=TwoWay}"
+    Width="{Binding Width,
+                    Mode=TwoWay}"
+    Height="{Binding Height,
+                     Mode=TwoWay}"
     d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
     Activated="Window_Activated"
     Background="{ui:ThemeResource ApplicationBackgroundBrush}"
     Closing="Window_Closing"
     Deactivated="Window_Deactivated"
-    Left="{Binding Left, Mode=TwoWay}"
+    Left="{Binding Left,
+                   Mode=TwoWay}"
     Loaded="Window_Loaded"
     LocationChanged="Window_LocationChanged"
     SizeChanged="Window_SizeChanged"
-    Top="{Binding Top, Mode=TwoWay}"
+    Top="{Binding Top,
+                  Mode=TwoWay}"
     WindowCornerPreference="DoNotRound"
     WindowStyle="None"
     mc:Ignorable="d">
@@ -63,7 +67,8 @@
         <Image
             x:Name="BackgroundImage"
             Grid.Row="1"
-            Source="{Binding BackgroundImagePath, Mode=OneWay}"
+            Source="{Binding BackgroundImagePath,
+                             Mode=OneWay}"
             Stretch="UniformToFill" />
 
         <Grid Grid.RowSpan="2">
@@ -83,7 +88,8 @@
                 Collapsed="SettingsExpander_Collapsed"
                 Expanded="Expander_Expanded"
                 Header="Screenshot Stager : Options"
-                IsExpanded="{Binding IsOptionsFlyoutOpen, Mode=TwoWay}">
+                IsExpanded="{Binding IsOptionsFlyoutOpen,
+                                     Mode=TwoWay}">
                 <Border Padding="20" Background="{ui:ThemeResource ApplicationBackgroundBrush}">
                     <StackPanel HorizontalAlignment="Left" Orientation="Vertical">
                         <ui:TextBlock
@@ -146,7 +152,8 @@
                                 x:Name="WidthTB"
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                Text="{Binding OutputImageWidth, Mode=TwoWay}" />
+                                Text="{Binding OutputImageWidth,
+                                               Mode=TwoWay}" />
 
                             <Label
                                 Grid.Row="1"
@@ -157,7 +164,8 @@
                                 x:Name="HeightTB"
                                 Grid.Row="1"
                                 Grid.Column="1"
-                                Text="{Binding OutputImageHeight, Mode=TwoWay}" />
+                                Text="{Binding OutputImageHeight,
+                                               Mode=TwoWay}" />
                         </Grid>
 
                         <ui:Button
@@ -176,8 +184,10 @@
                             x:Name="WindowListView"
                             Margin="0,10,0,0"
                             DropDownOpened="WindowListView_DropDownOpened"
-                            ItemsSource="{Binding WindowList, Mode=TwoWay}"
-                            SelectedItem="{Binding SelectedWindow, Mode=TwoWay}"
+                            ItemsSource="{Binding WindowList,
+                                                  Mode=TwoWay}"
+                            SelectedItem="{Binding SelectedWindow,
+                                                   Mode=TwoWay}"
                             SelectionChanged="WindowListView_SelectionChanged">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="local:WindowDetails">
@@ -206,7 +216,10 @@
                 Command="{Binding TakeScreenshotCommand}"
                 Content="Screenshot"
                 Icon="{ui:SymbolIcon Symbol=Camera24}"
-                IsEnabled="{Binding SelectedWindow, Mode=OneWay, Converter={StaticResource IsNull}, ConverterParameter=true}"
+                IsEnabled="{Binding SelectedWindow,
+                                    Mode=OneWay,
+                                    Converter={StaticResource IsNull},
+                                    ConverterParameter=true}"
                 ToolTip="Take a screenshot (Shift + Ctrl + 1)" />
 
             <ui:Button
@@ -222,19 +235,22 @@
             <ListView
                 x:Name="recentImages"
                 Grid.Column="3"
-                Width="{Binding RecentPaneWidth, Mode=OneWay}"
+                Width="{Binding RecentPaneWidth,
+                                Mode=OneWay}"
                 Height="40"
                 MaxWidth="300"
                 VerticalAlignment="Top"
                 VerticalContentAlignment="Center"
                 Background="Transparent"
                 BorderThickness="0"
-                ItemsSource="{Binding RecentCaptures, Mode=OneWay}">
+                ItemsSource="{Binding RecentCaptures,
+                                      Mode=OneWay}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Image
                             Width="32"
                             Height="32"
+                            Cursor="Hand"
                             MouseDown="Image_MouseDown"
                             Source="{Binding}"
                             ToolTip="{Binding}" />
@@ -248,7 +264,8 @@
             </ListView>
 
             <ui:TitleBar
-                Title="{Binding Filename, Mode=OneWay}"
+                Title="{Binding Filename,
+                                Mode=OneWay}"
                 Grid.Column="4"
                 Height="40"
                 ShowMaximize="False"
