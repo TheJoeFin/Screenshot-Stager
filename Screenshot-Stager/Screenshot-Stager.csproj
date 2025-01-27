@@ -9,11 +9,14 @@
     <UseWPF>true</UseWPF>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ApplicationIcon>StagerIcon.ico</ApplicationIcon>
-    <Platforms>x86;x64;arm64</Platforms>
-    <RuntimeIdentifiers>win-arm64;win-x86;win-x64</RuntimeIdentifiers>
+    <Platforms>x64;arm64</Platforms>
+    <RuntimeIdentifiers>win-arm64;win-x64</RuntimeIdentifiers>
     <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <WindowsSdkPackageVersion>10.0.19041.47</WindowsSdkPackageVersion>
+    <!--<PublishProfile>Properties\PublishProfiles\win-$(Platform).pubxml</PublishProfile>-->
+    <PublishSelfContained >true</PublishSelfContained >
+    <SelfContained>true</SelfContained>
   </PropertyGroup>
 
   <ItemGroup>
@@ -72,5 +75,15 @@
             <ProjectionMetadataWinmd Include="C:\.tools\.nuget\packages\microsoft.windows.sdk.win32metadata\55.0.45-preview\Windows.Win32.winmd" />
         </ItemGroup>
     </Target>
+
+    <!--<PropertyGroup Condition="$(TargetFramework.Contains('-windows')) and '$(Configuration)' == 'Debug' and $(PlatformTarget)=='x64'">
+        <Platforms>x64</Platforms>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="$(TargetFramework.Contains('-windows')) and '$(Configuration)' == 'Debug' and $(PlatformTarget)=='arm64'">
+        <Platforms>arm64</Platforms>
+        <RuntimeIdentifier>win-arm64</RuntimeIdentifier>
+    </PropertyGroup>-->
 
 </Project>
