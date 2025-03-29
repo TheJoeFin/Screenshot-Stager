@@ -63,12 +63,49 @@ public partial class MainViewModel : ObservableRecipient
     [ObservableProperty]
     private string outputImageSizeText = string.Empty;
 
+    private readonly List<string> backgroundImageFiles = [];
+
     readonly private int titleBarHeight = 40;
     readonly private int windowEdgeBuffer = 1;
     private bool isSettingWindowSize = false;
 
     public MainViewModel()
     {
+        LoadImagesInBackgroundFolder();
+        SetRandomBackground();
+    }
+
+    [RelayCommand]
+    private void ClearBackground()
+    {
+        BackgroundImagePath = string.Empty;
+    }
+
+    [RelayCommand]
+    private void SetRandomBackground()
+    {
+        if (backgroundImageFiles.Count == 0)
+            return;
+
+        int index = Random.Shared.Next(backgroundImageFiles.Count);
+        BackgroundImagePath = backgroundImageFiles[index];
+    }
+
+    private void LoadImagesInBackgroundFolder()
+    {
+        string backgroundsFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backgrounds");
+
+        if (Directory.Exists(backgroundsFolderPath))
+        {
+            string[] imageFiles = [.. Directory.GetFiles(backgroundsFolderPath, "*.jpg", SearchOption.TopDirectoryOnly)];
+
+            backgroundImageFiles.AddRange(imageFiles);
+        }
+        else
+        {
+            Debug.WriteLine("Backgrounds folder not found.");
+        }
+
     }
 
     partial void OnWidthChanged(double value)

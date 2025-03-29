@@ -96,7 +96,7 @@
                             <TextBlock
                                 Margin="0,10,10,0"
                                 VerticalAlignment="Center"
-                                Text="Background Color" />
+                                Text="Solid Color" />
                             <pix:PortableColorPicker
                                 x:Name="ColorPicker"
                                 Grid.Row="0"
@@ -107,16 +107,40 @@
                                 ShowAlpha="True"
                                 ShowFractionalPart="True"
                                 Style="{StaticResource DefaultColorPickerStyle}" />
+
+                        </Grid>
+                        <TextBlock
+                            Grid.Row="1"
+                            Margin="0,10,10,0"
+                            VerticalAlignment="Center"
+                            Text="Background Image" />
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+
                             <ui:Button
                                 Name="OpenBackgroundButton"
-                                Grid.Row="1"
-                                Grid.Column="0"
-                                Grid.ColumnSpan="2"
-                                Margin="0,10,0,0"
+                                Margin="0,10,12,0"
                                 Command="{Binding PickBackgroundImageCommand}"
-                                Content="Open Image File"
-                                Icon="{ui:SymbolIcon Symbol=Open24}" />
-                        </Grid>
+                                Content="Open"
+                                Icon="{ui:SymbolIcon Symbol=FolderOpen24}"
+                                ToolTip="Browse your PC for an image file to use as the background" />
+
+                            <ui:Button
+                                Name="RandomBackgroundButton"
+                                Margin="0,10,12,0"
+                                Command="{Binding SetRandomBackgroundCommand}"
+                                Content=""
+                                Icon="{ui:SymbolIcon Symbol=ArrowShuffle24}"
+                                ToolTip="Set the background to a random image from the defaults" />
+
+                            <ui:Button
+                                Name="ClearBackgroundButton"
+                                Margin="0,10,12,0"
+                                Command="{Binding ClearBackgroundCommand}"
+                                Content="Clear"
+                                Icon="{ui:SymbolIcon Symbol=ImageOff24}"
+                                ToolTip="Clear the image from the background and use the solid color" />
+
+                        </StackPanel>
                         <ui:TextBlock
                             Margin="0,10,0,0"
                             FontTypography="Subtitle"
@@ -208,17 +232,19 @@
                                     Mode=OneWay,
                                     Converter={StaticResource IsNull},
                                     ConverterParameter=true}"
-                ToolTip="Take a screenshot (Shift + Ctrl + 1)" />
+                ToolTip="Take a screenshot (Shift + Ctrl + 1)"
+                ToolTipService.Placement="Top" />
 
             <ui:Button
-                Name="SaveButton"
                 Grid.Column="2"
                 Height="40"
                 Margin="1"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Command="{Binding OpenScreenshotsFolderCommand}"
-                Icon="{ui:SymbolIcon Symbol=FolderOpen24}" />
+                Icon="{ui:SymbolIcon Symbol=FolderOpen24}"
+                ToolTip="Open folder where the screenshots are being saved"
+                ToolTipService.Placement="Top" />
 
             <ListView
                 x:Name="recentImages"
@@ -241,7 +267,8 @@
                             Cursor="Hand"
                             MouseDown="Image_MouseDown"
                             Source="{Binding}"
-                            ToolTip="{Binding}" />
+                            ToolTip="{Binding}"
+                            ToolTipService.Placement="Top" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
                 <ListView.ItemsPanel>
