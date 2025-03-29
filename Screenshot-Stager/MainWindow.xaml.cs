@@ -5,6 +5,8 @@ using System.Windows;
 using System.Windows.Media;
 using static Windows.Win32.PInvoke;
 using Windows.Win32.Graphics.Gdi;
+using System.Windows.Input;
+using System.Diagnostics;
 
 namespace Screenshot_Stager;
 
@@ -40,6 +42,7 @@ public partial class MainWindow : Window
     {
         ViewModel.ResetTopmost();
         DeleteObject(hBitmap);
+        App.Current.Shutdown();
     }
 
     private void Window_Deactivated(object sender, EventArgs e)
@@ -94,7 +97,7 @@ public partial class MainWindow : Window
         ViewModel.SetWindowSizeText();
     }
 
-    private void Image_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private void Image_MouseDown(object sender, MouseButtonEventArgs e)
     {
         // get the data from the data context of the item that was clicked
         if (sender is not System.Windows.Controls.Image element)
@@ -102,7 +105,14 @@ public partial class MainWindow : Window
 
         if (element.DataContext is not string tempPath)
             return;
-        
+
+        if (e.ClickCount == 2)
+        {
+            // open the file with the default program
+            Process.Start(new ProcessStartInfo(tempPath) { UseShellExecute = true });
+            return;
+        }
+
         Bitmap bitmap = new(tempPath);
         hBitmap = (HGDIOBJ)bitmap.GetHbitmap();
 
