@@ -7,6 +7,8 @@ using static Windows.Win32.PInvoke;
 using Windows.Win32.Graphics.Gdi;
 using System.Windows.Input;
 using System.Diagnostics;
+using GlobalHotKeys;
+using GlobalHotKeys.Native.Types;
 
 namespace Screenshot_Stager;
 
@@ -15,6 +17,8 @@ public partial class MainWindow : Window
     private HGDIOBJ hBitmap;
 
     public MainViewModel ViewModel { get; } = new();
+
+    private readonly HotKeyManager hotKeyManager;
 
     public MainWindow()
     {
@@ -25,7 +29,9 @@ public partial class MainWindow : Window
         ColorPicker.Color.RGB_G = 0;
         ColorPicker.Color.RGB_B = 139;
 
-        Background = new SolidColorBrush(Colors.Transparent);
+        hotKeyManager = new();
+        IRegistration registrations = hotKeyManager.Register(VirtualKeyCode.KEY_1, Modifiers.Control | Modifiers.Shift);
+        hotKeyManager.HotKeyPressed.Subscribe(_ => ViewModel.TakeScreenshot());
     }
 
     private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -42,7 +48,8 @@ public partial class MainWindow : Window
     {
         ViewModel.ResetTopmost();
         DeleteObject(hBitmap);
-        App.Current.Shutdown();
+        hotKeyManager.Dispose();
+        Application.Current.Shutdown();
     }
 
     private void Window_Deactivated(object sender, EventArgs e)

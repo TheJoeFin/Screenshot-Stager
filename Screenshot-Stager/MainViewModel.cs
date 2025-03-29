@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using GlobalHotKeys;
+using GlobalHotKeys.Native.Types;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -7,12 +9,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
-using GlobalHotKeys;
-using GlobalHotKeys.Native.Types;
 using System.Windows.Media;
 using Windows.Win32.Foundation;
-using System.Text.RegularExpressions;
-using System.Text;
 
 namespace Screenshot_Stager;
 public partial class MainViewModel : ObservableRecipient
@@ -71,10 +69,6 @@ public partial class MainViewModel : ObservableRecipient
 
     public MainViewModel()
     {
-        HotKeyManager hotKeyManager = new();
-        IRegistration registrations = hotKeyManager.Register(VirtualKeyCode.KEY_1, Modifiers.Control | Modifiers.Shift);
-        hotKeyManager.HotKeyPressed.Subscribe(_ => TakeScreenshot());
-
     }
 
     partial void OnWidthChanged(double value)
@@ -111,7 +105,7 @@ public partial class MainViewModel : ObservableRecipient
             return;
 
         double dpi = WindowMethods.GetScaleForHwnd(windowPointer.Value);
-        OutputImageWidth = (int)((Width) / dpi);
+        OutputImageWidth = (int)(Width / dpi);
         OutputImageHeight = (int)((Height + titleBarHeight) / dpi);
     }
 
@@ -219,7 +213,7 @@ public partial class MainViewModel : ObservableRecipient
     }
 
     [RelayCommand]
-    private void TakeScreenshot()
+    public void TakeScreenshot()
     {
         if (SelectedWindow is not WindowDetails window)
             return;
@@ -247,7 +241,7 @@ public partial class MainViewModel : ObservableRecipient
         {
             screenshot.Save(path, ImageFormat.Png);
 
-            App.Current.Dispatcher.Invoke((Action)delegate
+            App.Current.Dispatcher.Invoke(delegate
             {
                 RecentCaptures.Insert(0, path);
                 RecentPaneWidth = 50 * RecentCaptures.Count;
