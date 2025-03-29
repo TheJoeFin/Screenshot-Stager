@@ -3,13 +3,12 @@ using Screenshot_Stager.Models;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Media;
-using Wpf.Ui.Controls;
 using static Windows.Win32.PInvoke;
 using Windows.Win32.Graphics.Gdi;
 
 namespace Screenshot_Stager;
 
-public partial class MainWindow : FluentWindow
+public partial class MainWindow : Window
 {
     private HGDIOBJ hBitmap;
 
@@ -23,6 +22,8 @@ public partial class MainWindow : FluentWindow
         ColorPicker.Color.RGB_R = 0;
         ColorPicker.Color.RGB_G = 0;
         ColorPicker.Color.RGB_B = 139;
+
+        Background = new SolidColorBrush(Colors.Transparent);
     }
 
     private void Window_SizeChanged(object sender, SizeChangedEventArgs e)

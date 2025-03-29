@@ -1,4 +1,4 @@
-﻿<ui:FluentWindow
+﻿<Window
     x:Class="Screenshot_Stager.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -15,6 +15,7 @@
                      Mode=TwoWay}"
     d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
     Activated="Window_Activated"
+    AllowsTransparency="True"
     Background="Transparent"
     Closing="Window_Closing"
     Deactivated="Window_Deactivated"
@@ -25,7 +26,6 @@
     SizeChanged="Window_SizeChanged"
     Top="{Binding Top,
                   Mode=TwoWay}"
-    WindowCornerPreference="DoNotRound"
     WindowStyle="None"
     mc:Ignorable="d">
     <Window.Resources>
@@ -38,22 +38,6 @@
 
         <converters:IsNullConverter x:Key="IsNull" />
 
-        <Style x:Key="DefaultColorPickerStyle" TargetType="UserControl">
-            <Style.Resources>
-                <ResourceDictionary>
-                    <Style TargetType="Label">
-                        <Setter Property="Foreground" Value="Snow" />
-                    </Style>
-                    <Style TargetType="Grid">
-                        <Style.Triggers>
-                            <Trigger Property="Name" Value="MainGrid">
-                                <Setter Property="Background" Value="#252525" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </ResourceDictionary>
-            </Style.Resources>
-        </Style>
     </Window.Resources>
 
     <Grid>
@@ -61,6 +45,8 @@
             <RowDefinition Height="42" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Background="{ui:ThemeResource ApplicationBackgroundBrush}" />
 
         <Grid Grid.Row="1" Background="{Binding SelectedColor, Mode=OneWay}" />
 
@@ -270,6 +256,7 @@
                                 Mode=OneWay}"
                 Grid.Column="4"
                 Height="40"
+                Background="Transparent"
                 ShowMaximize="False"
                 ShowMinimize="False">
                 <ui:TitleBar.Icon>
@@ -279,4 +266,4 @@
         </Grid>
 
     </Grid>
-</ui:FluentWindow>
+</Window>
