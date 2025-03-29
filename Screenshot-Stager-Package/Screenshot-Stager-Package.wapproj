@@ -69,8 +69,6 @@
     <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <WindowsSdkPackageVersion>10.0.20348.47</WindowsSdkPackageVersion>
-    <PublishSelfContained >true</PublishSelfContained >
-    <SelfContained>true</SelfContained>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <AppxBundle>Always</AppxBundle>

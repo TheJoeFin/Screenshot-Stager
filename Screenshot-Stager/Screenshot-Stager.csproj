@@ -14,8 +14,7 @@
     <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <WindowsSdkPackageVersion>10.0.19041.47</WindowsSdkPackageVersion>
-    <!--<PublishProfile>Properties\PublishProfiles\win-$(Platform).pubxml</PublishProfile>-->
-    <PublishSelfContained>true</PublishSelfContained>
+    <PublishProfile>Properties\PublishProfiles\win-$(Platform).pubxml</PublishProfile>
   </PropertyGroup>
 
   <ItemGroup>
