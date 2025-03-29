@@ -57,7 +57,7 @@ public partial class MainViewModel : ObservableRecipient
     private string filename = "screenshot-fileName";
 
     [ObservableProperty]
-    private SolidColorBrush selectedColor = new(Colors.DarkBlue);
+    private SolidColorBrush selectedColor = new(Colors.Transparent);
 
     [ObservableProperty]
     private string backgroundImagePath = string.Empty;

@@ -15,7 +15,7 @@
                      Mode=TwoWay}"
     d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
     Activated="Window_Activated"
-    Background="{ui:ThemeResource ApplicationBackgroundBrush}"
+    Background="Transparent"
     Closing="Window_Closing"
     Deactivated="Window_Deactivated"
     Left="{Binding Left,
@@ -118,6 +118,8 @@
                                 Height="32"
                                 Margin="0,10,0,0"
                                 ColorChanged="PortableColorPicker_ColorChanged"
+                                ShowAlpha="True"
+                                ShowFractionalPart="True"
                                 Style="{StaticResource DefaultColorPickerStyle}" />
                             <ui:Button
                                 Name="OpenBackgroundButton"

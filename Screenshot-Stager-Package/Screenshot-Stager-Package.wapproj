@@ -168,7 +168,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Screenshot-Stager\Screenshot-Stager.csproj">
       <PublishProfile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Properties\PublishProfiles\x64.pubxml</PublishProfile>
-      <PublishProfile Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">Properties\PublishProfiles\Arm64.pubxml</PublishProfile>
+      <PublishProfile Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">Properties\PublishProfiles\arm64.pubxml</PublishProfile>
     </ProjectReference>
   </ItemGroup>
 </Project>
