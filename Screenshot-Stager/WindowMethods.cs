@@ -9,7 +9,7 @@ namespace Screenshot_Stager;
 
 public static partial class WindowMethods
 {
-    internal static IDictionary<HWND, string> GetOpenWindows()
+    public static IDictionary<HWND, string> GetOpenWindows()
     {
         HWND shellWindow = GetShellWindow();
         Dictionary<HWND, string> windows = [];
@@ -42,12 +42,12 @@ public static partial class WindowMethods
         return windows;
     }
 
-    internal static double GetScaleForHwnd(HWND hWnd)
+    public static double GetScaleForHwnd(HWND hWnd)
     {
         return 96.0 / GetDpiForWindow(hWnd);
     }
 
-    internal static void ChangeSize(HWND hWnd, int x, int y, int width, int height, bool topMost = true)
+    public static void ChangeSize(HWND hWnd, int x, int y, int width, int height, bool topMost = true)
     {
         _ = ShowWindow(hWnd, SHOW_WINDOW_CMD.SW_NORMAL);
         HWND topMostFlag = topMost ? HWND_TOPMOST : HWND_NOTOPMOST;
@@ -56,8 +56,8 @@ public static partial class WindowMethods
 
     private delegate bool EnumWindowsProc(HWND hWnd, LPARAM lParam);
 
-    internal static readonly HWND HWND_TOPMOST = new(-1);
-    internal static readonly HWND HWND_NOTOPMOST = new(-2);
+    public static readonly HWND HWND_TOPMOST = new(-1);
+    public static readonly HWND HWND_NOTOPMOST = new(-2);
 
     [StructLayout(LayoutKind.Sequential)]
     public struct RECT

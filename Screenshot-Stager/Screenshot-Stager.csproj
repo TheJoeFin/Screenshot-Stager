@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
     <RootNamespace>Screenshot_Stager</RootNamespace>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -14,7 +14,7 @@
     <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <WindowsSdkPackageVersion>10.0.19041.47</WindowsSdkPackageVersion>
-    <PublishProfile>Properties\PublishProfiles\win-$(Platform).pubxml</PublishProfile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -106,7 +106,7 @@
         </ItemGroup>
     </Target>
 
-    <!--<PropertyGroup Condition="$(TargetFramework.Contains('-windows')) and '$(Configuration)' == 'Debug' and $(PlatformTarget)=='x64'">
+    <PropertyGroup Condition="$(TargetFramework.Contains('-windows')) and '$(Configuration)' == 'Debug' and $(PlatformTarget)=='x64'">
         <Platforms>x64</Platforms>
         <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     </PropertyGroup>
@@ -114,6 +114,6 @@
     <PropertyGroup Condition="$(TargetFramework.Contains('-windows')) and '$(Configuration)' == 'Debug' and $(PlatformTarget)=='arm64'">
         <Platforms>arm64</Platforms>
         <RuntimeIdentifier>win-arm64</RuntimeIdentifier>
-    </PropertyGroup>-->
+    </PropertyGroup>
 
 </Project>
