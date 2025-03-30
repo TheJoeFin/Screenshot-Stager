@@ -1,7 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using GlobalHotKeys;
-using GlobalHotKeys.Native.Types;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -10,7 +8,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
 using System.Windows.Media;
-using Windows.Win32.Foundation;
+using static Screenshot_Stager.NativeMethods;
 
 namespace Screenshot_Stager;
 public partial class MainViewModel : ObservableRecipient

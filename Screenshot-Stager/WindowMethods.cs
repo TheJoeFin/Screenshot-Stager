@@ -1,9 +1,7 @@
 ﻿using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows;
-using Windows.Win32.Foundation;
-using Windows.Win32.Graphics.Gdi;
-using Windows.Win32.UI.WindowsAndMessaging;
-using static Windows.Win32.PInvoke;
+using static Screenshot_Stager.NativeMethods;
 
 namespace Screenshot_Stager;
 
@@ -14,7 +12,7 @@ public static partial class WindowMethods
         HWND shellWindow = GetShellWindow();
         Dictionary<HWND, string> windows = [];
 
-        EnumWindows(delegate (HWND hWnd, LPARAM lParam) 
+        EnumWindows(delegate (HWND hWnd, int lParam)
         {
             if (hWnd == shellWindow) return true;
             if (!IsWindowVisible(hWnd)) return true;
@@ -22,25 +20,23 @@ public static partial class WindowMethods
             int length = GetWindowTextLength(hWnd);
             if (length == 0) return true;
 
-            unsafe
-            {
-                fixed (char* title = stackalloc char[length + 1])
-                {
-                    PWSTR windowText = new(title);
-                    _ = GetWindowText(hWnd, windowText, length + 1);
+            StringBuilder builder = new(length);
+            _ = GetWindowTextSb(hWnd, builder, length + 1);
 
-                    bool isAltTab = IsWindowInAltTab(hWnd, windowText.ToString());
-                    if (!isAltTab) return true;
+            bool isAltTab = IsWindowInAltTab(hWnd, builder.ToString());
+            if (!isAltTab) return true;
 
-                    windows[hWnd] = windowText.ToString();
-                }
-            }
+            windows[hWnd] = builder.ToString();
             return true;
 
         }, 0);
 
         return windows;
     }
+
+    // Add to NativeMethods.cs - use a different name to avoid confusion
+    [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+    public static extern int GetWindowTextSb(HWND hWnd, StringBuilder lpString, int nMaxCount);
 
     public static double GetScaleForHwnd(HWND hWnd)
     {
@@ -51,7 +47,7 @@ public static partial class WindowMethods
     {
         _ = ShowWindow(hWnd, SHOW_WINDOW_CMD.SW_NORMAL);
         HWND topMostFlag = topMost ? HWND_TOPMOST : HWND_NOTOPMOST;
-        _ = SetWindowPos(hWnd, topMostFlag, x, y, width, height, SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
+        _ = SetWindowPos(hWnd, topMostFlag, x, y, width, height, SetWindowPosFlags.SWP_NOACTIVATE);
     }
 
     private delegate bool EnumWindowsProc(HWND hWnd, LPARAM lParam);
@@ -79,12 +75,12 @@ public static partial class WindowMethods
         //    return false;
 
         // Check if the window is a top-level window
-        IntPtr root = GetAncestor(hWnd, GET_ANCESTOR_FLAGS.GA_ROOT);
+        IntPtr root = GetAncestor(hWnd, GetAncestorFlags.GA_ROOT);
         if (root != hWnd)
             return false;
 
         // Get the extended window styles
-        int exStyle = GetWindowLong(hWnd, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+        long exStyle = GetWindowLong(hWnd, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
         string exStyleHexString = exStyle.ToString("X");
 
         // Exclude tool windows
@@ -105,11 +101,11 @@ public static partial class WindowMethods
     internal static Rect GetMonitorRect(HWND handle)
     {
         // get monitor for the window
-        HMONITOR hMonitor = MonitorFromWindow(handle, MONITOR_FROM_FLAGS.MONITOR_DEFAULTTONEAREST);
+        HMONITOR hMonitor = MonitorFromWindow(handle, MonitorDefaultTo.MONITOR_DEFAULTTONEAREST);
         MONITORINFO monitorInfo = new() { cbSize = (uint)Marshal.SizeOf(typeof(MONITORINFO)) };
 
         // apply offsets to x and y based on monitor
-        if (GetMonitorInfo(hMonitor, ref monitorInfo))
+        if (GetMonitorInfoW(hMonitor, ref monitorInfo))
         {
              return new Rect(
                 monitorInfo.rcMonitor.left,

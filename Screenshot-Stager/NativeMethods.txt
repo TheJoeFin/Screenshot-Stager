@@ -5,14 +5,9 @@ GetWindowTextLength
 IsWindowVisible
 GetShellWindow
 SetWindowPos
-DwmSetWindowAttribute
-GetWindowRect
 GetAncestor
 GetWindowLong
 MonitorFromWindow
 GetMonitorInfo
-RtlGetVersion
-OSVERSIONINFOEX
 GetDpiForWindow
-GetCursorPos
 DeleteObject

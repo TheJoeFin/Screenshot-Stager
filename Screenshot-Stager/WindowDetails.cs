@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Windows.Win32.Foundation;
+using static Screenshot_Stager.NativeMethods;
+
 
 namespace Screenshot_Stager;
 

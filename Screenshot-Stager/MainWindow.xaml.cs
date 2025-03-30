@@ -3,12 +3,11 @@ using Screenshot_Stager.Models;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Media;
-using static Windows.Win32.PInvoke;
-using Windows.Win32.Graphics.Gdi;
 using System.Windows.Input;
 using System.Diagnostics;
 using GlobalHotKeys;
 using GlobalHotKeys.Native.Types;
+using static Screenshot_Stager.NativeMethods;
 
 namespace Screenshot_Stager;
 
