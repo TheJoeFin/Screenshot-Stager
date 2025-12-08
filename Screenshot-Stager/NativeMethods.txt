@@ -12,7 +12,7 @@ GetWindowLong
 MonitorFromWindow
 GetMonitorInfo
 RtlGetVersion
-OSVERSIONINFOEX
+OSVERSIONINFOEXW
 GetDpiForWindow
 GetCursorPos
 DeleteObject
